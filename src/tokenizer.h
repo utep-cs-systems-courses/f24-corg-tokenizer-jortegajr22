@@ -65,7 +65,11 @@ int count_tokens(char *str)
 char *copy_str(char *inStr, short len)
 {
   char *new_str(char*)malloc((len +1) * sizeof(char)); //memory allocation size of inStr+1
-  
+
+  for(short i = 0; i < len; i++){
+    new_str[i] = inStr[i];
+  }
+  new_str[len] = '\0';
   
   return new_str;
 }
@@ -79,7 +83,11 @@ char *copy_str(char *inStr, short len)
      tokens[2] = "string" 
      tokens[3] = 0
 */
-char **tokenize(char* str);
+char **tokenize(char* str)
+{
+  int count = count_tokens(str);
+  char **tokens = (char**)malloc(count+1)
+}
 
 /* Prints all tokens. */
 void print_tokens(char **tokens);
