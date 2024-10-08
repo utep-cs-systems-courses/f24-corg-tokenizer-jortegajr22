@@ -15,7 +15,7 @@ int space_char(char c)
    Zero terminators are not printable (therefore false) */ 
 int non_space_char(char c)
 {
-  return (c != ' ' && c != '\t' && c != '\0');
+  return !space_char(c) && c != '\0';
 }
 
 /* Returns a pointer to the first character of the next 
@@ -23,7 +23,7 @@ int non_space_char(char c)
    str does not contain any tokens. */
 char *token_start(char *str)
 {
-  while (*str == ' ' || *str == '\t')
+  while (*str != '\0' || space_char(*str))
     {
       str++;
     }
@@ -36,7 +36,7 @@ char *token_start(char *str)
 /* Returns a pointer terminator char following *token */
 char *token_terminator(char *token)
 {
-  while (*token != ' ' && *token != '\t' && *token != '\0'){
+  while (*token != '\0' && non_space_char(*token){
     token++;
   }
   return token;
@@ -46,16 +46,10 @@ char *token_terminator(char *token)
 int count_tokens(char *str)
 {
   int count = 0;
-  char *start;
-
-  while ((start = token_start(str)) ! = NULL){
-    str = token token_terminator(start); //increments count at end of every token
+  char *token = token_start(str);
+  while (token != NULL){
     count++;
-
-    if (*str == '\0'){//null terminator check
-      break;
-    }
-    str++;
+    token = token_start(token_terminator(token));
   }
   return count;
 }
@@ -64,7 +58,7 @@ int count_tokens(char *str)
    containing <len> chars from <inStr> */
 char *copy_str(char *inStr, short len)
 {
-  char *new_str(char*)malloc((len +1) * sizeof(char)); //memory allocation size of inStr+1
+  char *new_str = (char *)malloc((len +1) * sizeof(char)); //memory allocation size of inStr+1
 
   for(short i = 0; i < len; i++){
     new_str[i] = inStr[i];
@@ -90,20 +84,20 @@ char **tokenize(char* str)
   char **tokens = (char **)malloc((count+1) * sizeof(char *));
 
   int t_index = 0;
-  char *token = token_start(*str);
+  char *token = token_start(str);
 
   //loop through string and extract tokens
   while (token != NULL){
     char *end_token = token_terminator(token);
-    int len = end - token;
-    token[t_index] = copy_str(token, len);
+    int len = end_token - token;
+    tokens[t_index] = copy_str(token, len);
     if (tokens[t_index] == NULL){
       printf("Malloc fail");
 
       return NULL;
     }
     t_index++;
-    token = token_start(end);
+    token = token_start(end_token);
   }
   tokens[t_index] = NULL;
   //find out how to free up array of tokens
@@ -112,19 +106,18 @@ char **tokenize(char* str)
 
 /* Prints all tokens. */
 void print_tokens(char **tokens){
-  if (tokens != NULL){
-    for (int i = 0; tokens[i] != NULL, i++){
-      printf("tokens[%d] = '%s'\n", i,tokens[i]);
-    }
+  int i = 0;
+  while (tokens[i] != NULL) {
+    printf("tokens[%d] = '%s'\n", i, tokens[i]);
+    i++;
   }
-  
 }
 
 /* Frees all tokens and the vector containing themx. */
 void free_tokens(char **tokens){
   //loop through tokens and free memory for each
   int i = 0;
-  while (tokens[i] ! = NULL){
+  while (tokens[i] != NULL){
     free(tokens[i]);
     i++;
   }
