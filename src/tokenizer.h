@@ -85,14 +85,50 @@ char *copy_str(char *inStr, short len)
 */
 char **tokenize(char* str)
 {
+  // malloc # of tokens+1
   int count = count_tokens(str);
-  char **tokens = (char**)malloc(count+1)
+  char **tokens = (char **)malloc((count+1) * sizeof(char *));
+
+  int t_index = 0;
+  char *token = token_start(*str);
+
+  //loop through string and extract tokens
+  while (token != NULL){
+    char *end_token = token_terminator(token);
+    int len = end - token;
+    token[t_index] = copy_str(token, len);
+    if (tokens[t_index] == NULL){
+      printf("Malloc fail");
+
+      return NULL;
+    }
+    t_index++;
+    token = token_start(end);
+  }
+  tokens[t_index] = NULL;
+  //find out how to free up array of tokens
+  return tokens;
 }
 
 /* Prints all tokens. */
-void print_tokens(char **tokens);
+void print_tokens(char **tokens){
+  if (tokens != NULL){
+    for (int i = 0; tokens[i] != NULL, i++){
+      printf("tokens[%d] = '%s'\n", i,tokens[i]);
+    }
+  }
+  
+}
 
 /* Frees all tokens and the vector containing themx. */
-void free_tokens(char **tokens);
+void free_tokens(char **tokens){
+  //loop through tokens and free memory for each
+  int i = 0;
+  while (tokens[i] ! = NULL){
+    free(tokens[i]);
+    i++;
+  }
+  free(tokens);
+  
 
 #endif
