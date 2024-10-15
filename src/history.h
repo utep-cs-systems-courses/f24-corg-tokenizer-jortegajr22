@@ -31,7 +31,7 @@ void add_history(List *list, char *str){
     len++;
   }
   //malloc new string and copy it into node
-  newItem->str = (char *)malloc(len + 1) * sizeof(char));
+  newItem->str = (char *)malloc((len + 1) * sizeof(char));
 
   //manual copy string
   for (int i = 0; i < len; i++){
@@ -53,7 +53,7 @@ void add_history(List *list, char *str){
     }
     
     //set newItem as lastnode
-    newItem->id = count;
+    newItem->id = count+1;
     current->next = newItem;
   }//end else
 }//end add_history
