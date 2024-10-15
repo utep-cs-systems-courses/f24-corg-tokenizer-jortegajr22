@@ -12,23 +12,89 @@ typedef struct s_List {
 } List;
 
 /* Initialize the linked list to keep the history. */
-List* init_history();
+List* init_history(){
+  List *newList = (List *)malloc(sizeof(List));
+  newList->root = NULL;
+  return newList;
+}
 
 /* Add a history item to the end of the list.
    List* list - the linked list
    char* str - the string to store
 */
-void add_history(List *list, char *str);
+void add_history(List *list, char *str){
+  Item *newItem = (Item *)malloc(sizeof(Item));
+  if (!newItem){
+    printf("malloc failed\n");
+    return;
+  }
+  int len = 0;
+  while (str[len] !='\0'){
+    len++;
+  }
+  //malloc new string and copy it into node
+  newItem->data = (char *)malloc(len + 1);
+  if(!newItem->data){
+    printf("malloc new string failed\n");
+    free(newItem);
+    return;
+  }//manual copy string
+  for (int i = 0; i < len; i++){
+    newItem->data[i] = str[i];
+  }
+  newItem->data[len] = '\0';
+
+  newItem->next = NULL;//next pointer set to NULL
+  //if the list is empty, set current as root
+  if (list->root == NULL){
+    list->root = newItem;
+  }
+  else {
+    Item *current = list->root;
+    while (current->next !=NULL){
+      current = current->next;
+    }
+    //set newItem as lastnode
+    current->next = newItem;
+  }
+}//end add_history
 
 /* Retrieve the string stored in the node where Item->id == id.
    List* list - the linked list
    int id - the id of the Item to find */
-char *get_history(List *list, int id);
+char *get_history(List *list, int id){
+  List *current = list;
+
+  while (current != NULL){
+    if (current->id == id){//match found
+      return current->str;
+    }
+    current = current->next;//continue search
+  }
+  return NULL;//No matching id
+}
 
 /*Print the entire contents of the list. */
-void print_history(List *list);
+void print_history(List *list){
+  List *current = list;
+  while (current != NULL){
+    printf("ID: %d, Data: %f\n", current->id, current->str);//print id and data
+    current = current->next;
+  }
+}
+
 
 /*Free the history list and the strings it references. */
-void free_history(List *list);
+void free_history(List *list){
+  List *current = list;
+  List *next;
+
+  //iterate and free
+  while (current != NULL){
+    free(current->str);
+    free(current);
+    current = next;
+  }
+}
 
 #endif
