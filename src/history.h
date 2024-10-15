@@ -24,7 +24,7 @@ List* init_history(){
 */
 void add_history(List *list, char *str){
   Item *newItem = (Item *)malloc(sizeof(Item));
-  newItem->id = id;
+  
   
   int len = 0;
   while (str[len] !='\0'){
@@ -37,19 +37,25 @@ void add_history(List *list, char *str){
   for (int i = 0; i < len; i++){
     newItem->str[i] = str[i];
   }
-  newItem->next = NULL//next pointer set to NULL
+  newItem->next = NULL;//next pointer set to NULL
+  int count = 0;
   //if the list is empty, set current as root
   if (list->root == NULL){
     list->root = newItem;
-  }
+    newItem->id=0;
+  }//end if
+
   else {
     Item *current = list->root;
     while (current->next !=NULL){
       current = current->next;
+      count++;
     }
+    
     //set newItem as lastnode
+    newItem->id = count;
     current->next = newItem;
-  }
+  }//end else
 }//end add_history
 
 /* Retrieve the string stored in the node where Item->id == id.
