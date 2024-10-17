@@ -47,18 +47,18 @@ char *get_history(List *list, int id){
     if (current->id = id){//match found
       return current->str;
     }
-    current = current->nex;//continue search
+    current = current->next;//continue search
   }
   return NULL; //no match found
 }
 void print_history(List *list){
   Item *current = list->root;
   while (current != NULL){
-    printf("ID: %d, Data: %f\n", current-id, current->str);
+    printf("ID: %d, Data: %f\n", current->id, current->str);
     current = current->next;
   }
 }
-void free history(List *list){
+void free_history(List *list){
   Item *current = list->root;
   Item *next;
 

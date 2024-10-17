@@ -1,18 +1,17 @@
-CFLAGA=--g -03
 
 tokenizer.o: tokenizer.h tokenizer.c uimain.c history.h 
-	cc -o tokenizer.o
+	cc -c tokenizer.c -o tokenizer.o
 
 history.o:  history.c uimain.c tokenizer.h
-	cc -o history.o
+	cc -c history.c -o history.o
 
 uimain.o: history.h tokenizer.h uimain.c
-	cc -o uimain.o
+	cc -c uimain.c -o uimain.o
 
 all: starToken
 
 starToken: history.o tokenizer.o uimain.o
-	cc -o starToken 
+	cc history.o tokenizer.o uimain.o -o starToken 
 
 clean:
 	rm -f *.o starToken
